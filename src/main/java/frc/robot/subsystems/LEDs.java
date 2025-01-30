@@ -8,29 +8,33 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LEDConstants;
 
-public class LED extends SubsystemBase {
+public class LEDs extends SubsystemBase {
 
-  public AddressableLED addressableLED = new AddressableLED(LEDConstants.ledPort);
-    public AddressableLEDBuffer buffer = new AddressableLEDBuffer(LEDConstants.bufferLength);
+  public static final int kPort = 9;
+  public static final int kLength = 120;
   /** Creates a new LED. */
 
-  public LED() {
+  public final AddressableLED Leds;
+  public final AddressableLEDBuffer buffer;
 
-    addressableLED.setLength(buffer.getLength());
-    addressableLED.setData(buffer);
-    addressableLED.start();
+  public LEDs() {
+
+    Leds = new AddressableLED(kPort);
+    buffer = new AddressableLEDBuffer(kLength);
+    Leds.setLength(kLength);
+    Leds.start();
     
+    LEDPattern blue = LEDPattern.solid(Color.kBlue);
+
+    blue.applyTo(buffer);
+    Leds.setData(buffer);
+
   }
 
-  public AddressableLEDBuffer  getAddressableLEDBuffer = new AddressableLEDBuffer(120);
-  
-  public LEDPattern red = LEDPattern.solid(Color.kRed);
 
-
-  
   
   
 
@@ -39,4 +43,13 @@ public class LED extends SubsystemBase {
     // This method will be called once per scheduler run
     
   }
+
+  public Command runPattern(LEDPattern pattern) {
+    return run(() -> pattern.applyTo(buffer));
+
+  }
+
+  
 }
+
+
