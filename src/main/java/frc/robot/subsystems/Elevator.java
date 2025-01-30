@@ -12,6 +12,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -37,17 +38,19 @@ public class Elevator extends SubsystemBase {
 
   public Elevator() {
     elevatorMainMotor = new TalonFX(ElevatorConstants.elevatorMainMotorID);
-    elevatorFollowerMotor = new TalonFX(ElevatorConstants.elevatorFollowerMotorID, "Cannie");
-    follower = new Follower(ElevatorConstants.elevatorMainMotorID, false);
+    elevatorFollowerMotor = new TalonFX(ElevatorConstants.elevatorFollowerMotorID);
+    // follower = new Follower(ElevatorConstants.elevatorMainMotorID, false);
 
     // currentPosition.setUpdateFrequency(50);
 
+    elevatorMainMotor.getConfigurator().apply(ElevatorConstants.elevatorConfigs);
+    elevatorFollowerMotor.getConfigurator().apply(ElevatorConstants.elevatorConfigs);
+
     // elevatorFollowerMotor.setControl(follower);
 
-    elevatorMainMotor.getConfigurator().apply(ElevatorConstants.elevatorConfigs);
-
     elevatorAlert = new Alert("Elevator is not Zeroed!", AlertType.kWarning);
-    elevatorMainMotor.setPosition(0);
+    elevatorMainMotor.setPosition(0.0);
+    elevatorFollowerMotor.setPosition(0.0);
   }
 
   public boolean buttonPressed() {
@@ -63,25 +66,42 @@ public class Elevator extends SubsystemBase {
 
   public void stopElevator() {
     elevatorMainMotor.set(0);
+    elevatorFollowerMotor.set(0);
   }
 
   public void setSpeed(double speed) {
     elevatorMainMotor.set(speed);
+    elevatorFollowerMotor.set(speed);
   }
 
-  public void printPosition() {
+  public void printMainPosition() {
     SmartDashboard.putNumber(
-        "Elevator Position", elevatorMainMotor.getPosition().getValueAsDouble());
+        "Elevator Main Position",
+        Units.metersToInches(elevatorMainMotor.getPosition().getValueAsDouble()));
+  }
+
+  public void printFollowerPosition() {
+    SmartDashboard.putNumber(
+        "Elevator Follower Position",
+        Units.metersToInches(elevatorFollowerMotor.getPosition().getValueAsDouble()));
   }
 
   public Command moveToPosition(double height) {
-    return run(() -> elevatorMainMotor.setControl(motionMagicRequest.withPosition(height)))
-        .onlyIf(() -> isZeroed)
-        .until(this::buttonPressed);
+    // return run(() -> elevatorMainMotor.setControl(motionMagicRequest.withPosition(height)))
+    //     .alongWith(
+    //         run(() ->
+    // elevatorFollowerMotor.setControl(motionMagicRequest.withPosition(height))));
+    //       .onlyIf(() -> isZeroed)
+    //       .until(this::buttonPressed);
+    return run(
+        () -> {
+          elevatorMainMotor.setControl(motionMagicRequest.withPosition(height));
+          elevatorFollowerMotor.setControl(motionMagicRequest.withPosition(height));
+        });
   }
 
   public Command downPosition() {
-    return moveToPosition(0.0);
+    return moveToPosition(ElevatorConstants.downHeight);
   }
 
   private final SysIdRoutine elevatorSysIdRoutine =
@@ -107,12 +127,13 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
-    printPosition();
+    printMainPosition();
+    printFollowerPosition();
 
-    if (!isZeroed && buttonPressed()) {
-      elevatorMainMotor.setPosition(0, .001);
-      isZeroed = true;
-    }
+    // if (!isZeroed && buttonPressed()) {
+    //   elevatorMainMotor.setPosition(0, .001);
+    //   isZeroed = true;
+    // }
 
     elevatorAlert.set(!isZeroed);
   }
