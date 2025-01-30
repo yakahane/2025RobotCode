@@ -27,9 +27,9 @@ public class LEDs extends SubsystemBase {
     Leds.setLength(kLength);
     Leds.start();
     
-    LEDPattern blue = LEDPattern.solid(Color.kBlue);
+    LEDPattern red = LEDPattern.solid(Color.kRed);
 
-    blue.applyTo(buffer);
+    red.applyTo(buffer);
     Leds.setData(buffer);
 
   }
