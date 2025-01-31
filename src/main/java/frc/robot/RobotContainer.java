@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.CoralAlign;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Arm;
@@ -59,6 +58,7 @@ public class RobotContainer {
   private Trigger armMode = operatorStick.button(OperatorConstants.armModeButton);
 
   public RobotContainer() {
+
     configureDriverBindings();
     configureOperatorBindings();
     configureAutoChooser();
@@ -118,17 +118,10 @@ public class RobotContainer {
                         new Rotation2d(
                             -driverController.getLeftY(), -driverController.getLeftX()))));
 
-    Command leftCoralAlign = new CoralAlign("Left");
-    Command rightCoralAlign = new CoralAlign("Right");
-
-    driverController
-        .leftBumper()
-        .whileTrue(leftCoralAlign)
-        .onFalse(Commands.runOnce(() -> leftCoralAlign.cancel()));
-    driverController
-        .rightBumper()
-        .whileTrue(rightCoralAlign)
-        .onFalse(Commands.runOnce(() -> rightCoralAlign.cancel()));
+    driverController.leftBumper().whileTrue(drivetrain.ReefAlign(true));
+    // .onFalse(Commands.runOnce(() -> leftCoralAlign.cancel()));
+    // driverController.rightBumper().whileTrue(drivetrain.ReefAlign());
+    // .onFalse(Commands.runOnce(() -> rightCoralAlign.cancel()));
 
     // reset the field-centric heading on left bumper press
     driverController

@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -12,6 +16,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -43,10 +48,12 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -69,6 +76,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
   private Notifier m_simNotifier = null;
   private double m_lastSimTime;
 
+  Transform2d aprilTagOffset;
+
   /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
   private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
   /* Red alliance sees forward as 180 degrees (toward blue alliance wall) */
@@ -90,8 +99,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
       TimeInterpolatableBuffer.createBuffer(1.5);
 
   private Field2d field = new Field2d();
-
-  Transform2d aprilTagOffset;
 
   public static record PoseEstimate(Pose3d estimatedPose, double timestamp, Vector<N3> standardDevs)
       implements Comparable<PoseEstimate> {
@@ -214,7 +221,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     if (Utils.isSimulation()) {
       startSimThread();
     }
-
     configureAutoBuilder();
   }
 
@@ -234,7 +240,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
       double odometryUpdateFrequency,
       SwerveModuleConstants<?, ?, ?>... modules) {
     super(drivetrainConstants, odometryUpdateFrequency, modules);
-
     // pigeon =
     //     new Pigeon2(GyroConstants.pigeonID, "Cannie"); // Need to change the the pigeon ID for
     // later
@@ -278,7 +283,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
       limelightSim.enableProcessedStream(true);
       limelightSim.enableDrawWireframe(true);
     }
-
     configureAutoBuilder();
   }
 
@@ -349,6 +353,86 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         pose -> field.getObject("Target Pose").setPose(pose));
 
     SmartDashboard.putData("Swerve/Field", field);
+  }
+
+  public static Transform2d getBestTransform(List<Transform2d> transforms) {
+    // Define a comparator to sort transforms by their magnitude
+    Comparator<Transform2d> comparator =
+        Comparator.comparingDouble(
+            transform ->
+                transform.getTranslation().getNorm()
+                    + Math.abs(transform.getRotation().getRadians()));
+
+    // Sort the list of transforms in ascending order of magnitude
+    Collections.sort(transforms, comparator);
+
+    // Return the first transform (which has the smallest magnitude)
+    return transforms.get(0);
+  }
+
+  public Pose2d getAprilTagPose(Boolean leftAlign) {
+    List<PhotonPipelineResult> latestResults = latestLimelightResult;
+    List<PhotonTrackedTarget> targets = new ArrayList<>();
+    List<Transform2d> transforms = new ArrayList<>();
+    Pose2d exceptionPose = new Pose2d(1000.0, 1000.0, new Rotation2d(0));
+    Transform2d poseTransform;
+
+    if (latestResults == null || latestResults.isEmpty()) {
+      return exceptionPose;
+    }
+
+    for (PhotonPipelineResult result : latestResults) {
+      if (!result.hasTargets()) {
+        return exceptionPose;
+      } else {
+        try {
+          List<PhotonTrackedTarget> seenTargets = result.getTargets();
+          targets.addAll(seenTargets);
+          seenTargets.clear();
+        } catch (NullPointerException ex) {
+          ex.printStackTrace();
+          return exceptionPose;
+        }
+      }
+    }
+
+    for (PhotonTrackedTarget target : targets) {
+      transforms.add(
+          new Transform2d(
+              target.getBestCameraToTarget().getX(),
+              target.getBestCameraToTarget().getY(),
+              target.getBestCameraToTarget().getRotation().toRotation2d()));
+    }
+
+    Transform2d bestTransform = getBestTransform(transforms);
+
+    if (leftAlign == true) {
+      aprilTagOffset = new Transform2d(0, VisionConstants.aprilTagReefOffset, new Rotation2d(0));
+    }
+    if (leftAlign == false) {
+      aprilTagOffset = new Transform2d(0, -VisionConstants.aprilTagReefOffset, new Rotation2d(0));
+    }
+
+    poseTransform = bestTransform.plus(aprilTagOffset);
+
+    Pose2d aprilTagPose =
+        getState()
+            .Pose
+            .transformBy(VisionConstants.limelightTransform2d)
+            .transformBy(poseTransform);
+
+    return aprilTagPose;
+  }
+
+  public Command ReefAlign(Boolean leftAlign) {
+    return AutoBuilder.pathfindToPose(
+       getAprilTagPose(leftAlign),
+        new PathConstraints(
+            SwerveConstants.maxTranslationalSpeed.in(MetersPerSecond),
+            SwerveConstants.maxTransationalAcceleration.in(MetersPerSecondPerSecond),
+            SwerveConstants.maxRotationalSpeed.in(RadiansPerSecond),
+            SwerveConstants.maxAngularAcceleration.in(RadiansPerSecondPerSecond)),
+        0);
   }
 
   /**
@@ -431,7 +515,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
       return false;
     }
 
-    if (averageDistance > 3 && detectedTargets < 2) {//4
+    if (averageDistance > 3 && detectedTargets < 2) { // 4
       return false;
     }
 

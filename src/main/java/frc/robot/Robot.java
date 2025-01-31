@@ -7,6 +7,7 @@ package frc.robot;
 import au.grapplerobotics.CanBridge;
 import com.ctre.phoenix6.CANBus.CANBusStatus;
 import com.ctre.phoenix6.SignalLogger;
+import com.pathplanner.lib.commands.PathfindingCommand;
 import com.revrobotics.spark.SparkBase;
 import edu.wpi.first.hal.can.CANStatus;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -72,6 +73,7 @@ public class Robot extends TimedRobot {
 
     double startupTimeSeconds = Timer.getFPGATimestamp() - startTime;
     DataLogManager.log("Startup Time (ms): " + startupTimeSeconds * 1000.0);
+    PathfindingCommand.warmupCommand().schedule();
   }
 
   @Override
