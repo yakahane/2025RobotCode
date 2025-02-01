@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -56,6 +57,15 @@ public class RobotContainer {
 
   private Trigger buttonTrigger = new Trigger(elevator::buttonPressed);
   private Trigger armMode = operatorStick.button(OperatorConstants.armModeButton);
+
+  // Just put a bunch of instantcommands as placeholders for now
+  Command outtakePrematch = new InstantCommand();
+  Command algaeIntakePrematch = new InstantCommand();
+  Command armPrematch = new InstantCommand();
+  Command elevatorPrematch = new InstantCommand();
+  Command groundIntakePrematch = groundIntake.buildPrematch();
+  Command indexerPrematch = indexer.buildPrematch();
+  Command swervePrematch = new InstantCommand();
 
   public RobotContainer() {
 

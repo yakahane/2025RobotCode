@@ -3,6 +3,8 @@ package frc.robot;
 import static edu.wpi.first.units.Units.FeetPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecondPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
@@ -18,6 +20,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
@@ -45,7 +48,7 @@ public class Constants {
   public static class SwerveConstants {
     public static final LinearVelocity maxTranslationalSpeed = FeetPerSecond.of(15);
     public static final LinearVelocity slowModeMaxTranslationalSpeed = FeetPerSecond.of(5);
-    public static final AngularVelocity maxRotationalSpeed = RotationsPerSecond.of(1);
+    public static final AngularVelocity maxRotationalSpeed = RotationsPerSecond.of(1.5);
 
     public static final Time translationZeroToFull = Seconds.of(.5);
     public static final Time rotationZeroToFull = Seconds.of(0.25);
@@ -70,11 +73,18 @@ public class Constants {
     public static final Translation2d[] wheelLocations = {
       frontLeft, frontRight, backLeft, backRight
     };
+
+    public static final PathConstraints pathConstraints =
+        new PathConstraints(
+            SwerveConstants.maxTranslationalSpeed.in(MetersPerSecond),
+            SwerveConstants.maxTransationalAcceleration.in(MetersPerSecondPerSecond),
+            SwerveConstants.maxRotationalSpeed.in(RadiansPerSecond),
+            SwerveConstants.maxAngularAcceleration.in(RadiansPerSecondPerSecond));
   }
 
   public static class AutoConstants {
-    public static final PIDConstants translationPID = new PIDConstants(5.0, 0.0, 0.0);
-    public static final PIDConstants rotationPID = new PIDConstants(1.0, 0.0, 0.0);
+    public static final PIDConstants translationPID = new PIDConstants(5.0, 0.0, 0.0); // 5
+    public static final PIDConstants rotationPID = new PIDConstants(1.0, 0.0, 0.0); // 1
   }
 
   public static class VisionConstants {
@@ -104,21 +114,21 @@ public class Constants {
             Units.inchesToMeters(-12.619),
             Units.inchesToMeters(5.143),
             new Rotation3d(
-                0.0, Units.degreesToRadians(0), Units.degreesToRadians(225))); // Pitch: 65
+                0.0, Units.degreesToRadians(-25), Units.degreesToRadians(225))); // Pitch: 65
 
     public static final Transform3d arducamRightTransform =
         new Transform3d(
             Units.inchesToMeters(-12.619),
             Units.inchesToMeters(12.619),
             Units.inchesToMeters(5.143),
-            new Rotation3d(0.0, Units.degreesToRadians(0), Units.degreesToRadians(135)));
+            new Rotation3d(0.0, Units.degreesToRadians(-25), Units.degreesToRadians(135)));
 
     public static final Transform3d limelightTransform =
         new Transform3d(
             Units.inchesToMeters(12.525),
             Units.inchesToMeters(0),
             Units.inchesToMeters(4.423),
-            new Rotation3d(0.0, Units.degreesToRadians(0), Units.degreesToRadians(0)));
+            new Rotation3d(0.0, Units.degreesToRadians(-25), Units.degreesToRadians(0)));
 
     public static final Transform2d limelightTransform2d =
         new Transform2d(
