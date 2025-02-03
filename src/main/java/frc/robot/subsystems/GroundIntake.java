@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import au.grapplerobotics.LaserCan;
-
 import com.revrobotics.REVLibError;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -113,13 +112,13 @@ public class GroundIntake extends ExpandedSubsystem {
         Commands.runOnce(
             () -> {
               if (Math.abs(groundIntakeMotor.get()) <= 1e-4) {
-                if (groundIntakeMotor.get() < IntakeConstants.groundIntakeMotorSpeed - 0.1 || groundIntakeMotor.get() > IntakeConstants.groundIntakeMotorSpeed + 0.1) {
+                if (groundIntakeMotor.get() < IntakeConstants.groundIntakeMotorSpeed - 0.1
+                    || groundIntakeMotor.get() > IntakeConstants.groundIntakeMotorSpeed + 0.1) {
                   addError("Indexer Motor is not at desired velocity");
                   // We just put a fake range for now; we'll update this later on
                 }
                 addError("Indexer Motor is not moving");
-              } 
-              else {
+              } else {
                 addInfo("Indexer Motor is moving");
               }
             }));

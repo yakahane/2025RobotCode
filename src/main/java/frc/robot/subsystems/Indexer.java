@@ -86,13 +86,13 @@ public class Indexer extends ExpandedSubsystem {
         Commands.runOnce(
             () -> {
               if (Math.abs(indexerMotor.get()) <= 1e-4) {
-                if (indexerMotor.get() < IntakeConstants.indexerMotorSpeed - 0.1 || indexerMotor.get() > IntakeConstants.indexerMotorSpeed + 0.1) {
+                if (indexerMotor.get() < IntakeConstants.indexerMotorSpeed - 0.1
+                    || indexerMotor.get() > IntakeConstants.indexerMotorSpeed + 0.1) {
                   addError("Indexer Motor is not at desired velocity");
                   // We just put a fake range for now; we'll update this later on
                 }
                 addError("Indexer Motor is not moving");
-              } 
-              else {
+              } else {
                 addInfo("Indexer Motor is moving");
               }
             }));

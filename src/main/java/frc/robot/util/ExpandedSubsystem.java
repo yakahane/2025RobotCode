@@ -73,28 +73,29 @@ public abstract class ExpandedSubsystem extends SubsystemBase {
     return false;
   }
 
-    public Command getPrematchCheckCommand() {
-        return Commands.none();
-    }
+  public Command getPrematchCheckCommand() {
+    return Commands.none();
+  }
 
-    public Command buildPrematch() {
-        return Commands.sequence(
-                Commands.runOnce(
-                    () -> {
-                    cancelCurrentCommand();
-                    clearAlerts();
-                    setSystemStatus("Running Pre-Match Check");
-                    }),
-                getPrematchCheckCommand())
-            .until(this::containsErrors)
-            .finallyDo(
-                (interrupted) -> {
-                cancelCurrentCommand();
+  public Command buildPrematch() {
+    return Commands.sequence(
+            Commands.runOnce(
+                () -> {
+                  cancelCurrentCommand();
+                  clearAlerts();
+                  setSystemStatus("Running Pre-Match Check");
+                }),
+            getPrematchCheckCommand())
+        .until(this::containsErrors)
+        .finallyDo(
+            (interrupted) -> {
+              cancelCurrentCommand();
 
-                if (interrupted && !containsErrors()) {
-                    addError("Pre-Match Interrpted");
-                } else if (!interrupted && !containsErrors()) {
-                    setSystemStatus("Pre-Match Successful!");
-                }});
-    }
+              if (interrupted && !containsErrors()) {
+                addError("Pre-Match Interrpted");
+              } else if (!interrupted && !containsErrors()) {
+                setSystemStatus("Pre-Match Successful!");
+              }
+            });
+  }
 }

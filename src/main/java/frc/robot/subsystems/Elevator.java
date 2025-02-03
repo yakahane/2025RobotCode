@@ -33,7 +33,7 @@ public class Elevator extends ExpandedSubsystem {
   private final VoltageOut voltageRequest = new VoltageOut(0.0);
 
   private DigitalInput buttonSwitch = new DigitalInput(ElevatorConstants.buttonSwitchID);
-  private boolean isZeroed = true;
+  private boolean isZeroed = false;
   private Alert elevatorAlert;
 
   public Elevator() {
@@ -49,8 +49,8 @@ public class Elevator extends ExpandedSubsystem {
     // elevatorFollowerMotor.setControl(follower);
 
     elevatorAlert = new Alert("Elevator is not Zeroed!", AlertType.kWarning);
-    elevatorMainMotor.setPosition(0.0);
-    elevatorFollowerMotor.setPosition(0.0);
+    // elevatorMainMotor.setPosition(0.0);
+    // elevatorFollowerMotor.setPosition(0.0);
   }
 
   public boolean buttonPressed() {
@@ -105,11 +105,12 @@ public class Elevator extends ExpandedSubsystem {
     // elevatorFollowerMotor.setControl(motionMagicRequest.withPosition(height))));
     //       .onlyIf(() -> isZeroed)
     //       .until(this::buttonPressed);
-    return run(
-        () -> {
+    return run(() -> {
           elevatorMainMotor.setControl(motionMagicRequest.withPosition(height));
           elevatorFollowerMotor.setControl(motionMagicRequest.withPosition(height));
-        });
+        })
+        .onlyIf(() -> isZeroed)
+        .until(this::buttonPressed);
   }
 
   public Command downPosition() {
@@ -141,11 +142,17 @@ public class Elevator extends ExpandedSubsystem {
   public void periodic() {
     printMainPosition();
     printFollowerPosition();
+    // System.out.println("The button is pressed:" + buttonPressed());
 
-    // if (!isZeroed && buttonPressed()) {
-    //   elevatorMainMotor.setPosition(0, 0);
-    //   isZeroed = true;
-    // }
+    if (!isZeroed && buttonPressed()) {
+      elevatorMainMotor.setPosition(0, 0);
+      isZeroed = true;
+    }
+
+    if (Units.metersToInches(elevatorFollowerMotor.getPosition().getValueAsDouble()) < .5
+        && !buttonPressed()) {
+      isZeroed = false;
+    }
 
     elevatorAlert.set(!isZeroed);
   }
