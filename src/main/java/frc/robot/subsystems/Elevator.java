@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.SignalLogger;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -27,15 +26,11 @@ public class Elevator extends ExpandedSubsystem {
   private TalonFX elevatorMainMotor;
 
   private TalonFX elevatorFollowerMotor;
-  private Follower follower;
-
   private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
   private final VoltageOut voltageRequest = new VoltageOut(0.0);
 
   private DigitalInput buttonSwitch = new DigitalInput(ElevatorConstants.buttonSwitchID);
-  // private boolean isZeroed = false;
-  private Alert elevatorAlert;
-
+  @SuppressWarnings("resource")
   public Elevator() {
     elevatorMainMotor = new TalonFX(ElevatorConstants.elevatorMainMotorID);
     elevatorFollowerMotor = new TalonFX(ElevatorConstants.elevatorFollowerMotorID);
@@ -48,7 +43,7 @@ public class Elevator extends ExpandedSubsystem {
 
     // elevatorFollowerMotor.setControl(follower);
 
-    elevatorAlert = new Alert("Elevator is not Zeroed!", AlertType.kWarning);
+    new Alert("Elevator is not Zeroed!", AlertType.kWarning);
     elevatorMainMotor.setPosition(0.0);
     elevatorFollowerMotor.setPosition(0.0);
   }

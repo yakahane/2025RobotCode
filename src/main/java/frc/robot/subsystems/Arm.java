@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -19,8 +18,6 @@ import frc.robot.util.ExpandedSubsystem;
 public class Arm extends ExpandedSubsystem {
   private SparkMax armMotor;
   private SparkClosedLoopController armPIDController;
-  private SparkAbsoluteEncoder armAbsoluteEncoder;
-
   /** Creates a new CoralArmIntake. */
   public Arm() {
     armMotor = new SparkMax(47, MotorType.kBrushless);

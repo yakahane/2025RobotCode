@@ -102,8 +102,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
   private Field2d field = new Field2d();
 
-  private Optional<Alliance> alliance;
-
   private int bestTargetID;
   private double leftPoseX;
   private double leftPoseY;
@@ -791,7 +789,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     latestarducamRightResult = arducamRight.getAllUnreadResults();
     latestLimelightResult = limelight.getAllUnreadResults();
 
-    alliance = DriverStation.getAlliance();
+    DriverStation.getAlliance();
 
     updateVisionPoseEstimates();
     final NetworkTableInstance inst = NetworkTableInstance.getDefault();

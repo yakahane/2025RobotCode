@@ -25,7 +25,6 @@ import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.TurnToReef;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.GroundIntake;
 import frc.robot.subsystems.Indexer;
@@ -36,7 +35,6 @@ import frc.robot.util.PersistentSendableChooser;
 
 public class RobotContainer {
   private final Elevator elevator = new Elevator();
-  private final Arm arm = new Arm();
   private final Indexer indexer = new Indexer();
   private final Outtake outtake = new Outtake();
   private final GroundIntake groundIntake = new GroundIntake();
@@ -56,7 +54,6 @@ public class RobotContainer {
   private Trigger intakeLaserBroken = new Trigger(groundIntake::intakeLaserBroken);
   private Trigger outtakeLaserBroken = new Trigger(outtake::outtakeLaserBroken);
 
-  private Trigger buttonTrigger = new Trigger(elevator::buttonPressed);
   private Trigger armMode = operatorStick.button(OperatorConstants.armModeButton);
 
   // Just put a bunch of instantcommands as placeholders for now
@@ -252,7 +249,7 @@ public class RobotContainer {
 
     operatorStick
         .button(OperatorConstants.outtakeIndexerButton)
-        .whileTrue(indexer.outtakeIndexer())
+        .whileTrue(indexer.runIndexer())
         .onFalse(indexer.stop());
   }
 

@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -19,8 +18,6 @@ public class AlgaeIntake extends ExpandedSubsystem {
   /** Creates a new AlgaeIntake. */
   private SparkMax algaeIntakeMotor =
       new SparkMax(AlgaeIntakeConstants.algaeIntakeMotorID, MotorType.kBrushless);
-
-  private RelativeEncoder AlgaeIntake = algaeIntakeMotor.getEncoder();
 
   public AlgaeIntake() {
     DataLogManager.log("Configuring Intake");

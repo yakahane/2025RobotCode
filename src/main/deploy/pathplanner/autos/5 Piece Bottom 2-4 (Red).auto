@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Bottom to 2R"
+            "pathName": "Bottom to 2L (Red)"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2R to Station"
+            "pathName": "2L to Station (Red)"
           }
         },
         {
@@ -55,7 +55,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Station to 2L"
+            "pathName": "Station to 2R"
           }
         },
         {
@@ -79,7 +79,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2L to Station"
+            "pathName": "2R to Station (Red)"
           }
         },
         {
@@ -103,7 +103,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Station to 3R"
+            "pathName": "Station to 3L (Red)"
           }
         },
         {
@@ -127,7 +127,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3R to Station"
+            "pathName": "3L to Station (Red)"
           }
         },
         {
@@ -149,15 +149,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "set arm home position"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Station to 3L"
+            "pathName": "Station to 3R (Red)"
           }
         },
         {
@@ -181,7 +175,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3L to Station"
+            "pathName": "3R to Station (Red)"
           }
         },
         {
@@ -205,7 +199,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Station to 4R"
+            "pathName": "Station3 to 4L (Red)"
           }
         },
         {
