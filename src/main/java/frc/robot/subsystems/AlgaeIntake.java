@@ -11,11 +11,11 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.util.ExpandedSubsystem;
 
-public class AlgaeIntake extends SubsystemBase {
+public class AlgaeIntake extends ExpandedSubsystem {
   /** Creates a new AlgaeIntake. */
   private SparkMax algaeIntakeMotor =
       new SparkMax(AlgaeIntakeConstants.algaeIntakeMotorID, MotorType.kBrushless);
@@ -78,4 +78,34 @@ public class AlgaeIntake extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Intake/Temperature", algaeIntakeMotor.getMotorTemperature());
   }
+
+  // public Command getPrematchCheckCommand(
+  //     CommandXboxController controller, CommandJoystick joystick) {
+  //   return Commands.sequence(
+  //       // Check for hardware motors
+  //       Commands.runOnce(
+  //           () -> {
+  //             REVLibError error = algaeIntakeMotor.getLastError();
+  //             if (error != REVLibError.kOk) {
+  //               addError("Climber motor error: " + error.name());
+  //             } else {
+  //               addInfo("Climber motor contains no errors");
+  //             }
+  //           }),
+  //       // Checks climber motor
+  //       Commands.runOnce(
+  //           () -> {
+  //             joystick.setButton(OperatorConstants.climberButton, true);
+  //           }),
+  //       Commands.waitSeconds(prematchDelay),
+  //       Commands.runOnce(
+  //           () -> {
+  //             if (getVelocity() < 10) {
+  //               addError("Climber motor isn't working");
+  //             } else {
+  //               addInfo("Climber motor is moving");
+  //             }
+  //             joystick.clearVirtualButtons();
+  //           }));
+  // }
 }

@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MIddle to 6L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6L to Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Station to 6R"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6R to Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Station to 5L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5L to Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Station to 5R"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5R to Station"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Station to 4L"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

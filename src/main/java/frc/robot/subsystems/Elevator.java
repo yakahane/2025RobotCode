@@ -18,11 +18,11 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.util.ExpandedSubsystem;
 
-public class Elevator extends SubsystemBase {
+public class Elevator extends ExpandedSubsystem {
   /** Creates a new Elevator. */
   private TalonFX elevatorMainMotor;
 
@@ -33,7 +33,7 @@ public class Elevator extends SubsystemBase {
   private final VoltageOut voltageRequest = new VoltageOut(0.0);
 
   private DigitalInput buttonSwitch = new DigitalInput(ElevatorConstants.buttonSwitchID);
-  private boolean isZeroed = true;
+  // private boolean isZeroed = false;
   private Alert elevatorAlert;
 
   public Elevator() {
@@ -58,7 +58,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public Command homeElevator() {
-    return run(() -> setSpeed(-0.2))
+    return downSpeed(0.2)
         .until(this::buttonPressed)
         .unless(this::buttonPressed)
         .finallyDo(this::stopElevator);
@@ -69,9 +69,21 @@ public class Elevator extends SubsystemBase {
     elevatorFollowerMotor.set(0);
   }
 
-  public void setSpeed(double speed) {
-    elevatorMainMotor.set(speed);
-    elevatorFollowerMotor.set(speed);
+  public Command upSpeed(double speed) {
+    return run(
+        () -> {
+          elevatorMainMotor.set(speed);
+          elevatorFollowerMotor.set(speed);
+        });
+  }
+
+  public Command downSpeed(double speed) {
+    return run(() -> {
+          elevatorMainMotor.set(-speed);
+          elevatorFollowerMotor.set(-speed);
+        })
+        .until(this::buttonPressed)
+        .unless(this::buttonPressed);
   }
 
   public void printMainPosition() {
@@ -93,11 +105,12 @@ public class Elevator extends SubsystemBase {
     // elevatorFollowerMotor.setControl(motionMagicRequest.withPosition(height))));
     //       .onlyIf(() -> isZeroed)
     //       .until(this::buttonPressed);
-    return run(
-        () -> {
+    return run(() -> {
           elevatorMainMotor.setControl(motionMagicRequest.withPosition(height));
           elevatorFollowerMotor.setControl(motionMagicRequest.withPosition(height));
-        });
+        })
+        // .onlyIf(() -> isZeroed)
+        .until(this::buttonPressed);
   }
 
   public Command downPosition() {
@@ -129,12 +142,18 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     printMainPosition();
     printFollowerPosition();
+    // System.out.println("The button is pressed:" + buttonPressed());
 
     // if (!isZeroed && buttonPressed()) {
-    //   elevatorMainMotor.setPosition(0, .001);
+    //   elevatorMainMotor.setPosition(0, 0);
     //   isZeroed = true;
     // }
 
-    elevatorAlert.set(!isZeroed);
+    // if (Units.metersToInches(elevatorFollowerMotor.getPosition().getValueAsDouble()) < .5
+    //     && !buttonPressed()) {
+    //   isZeroed = false;
+    // }
+
+    // elevatorAlert.set(!isZeroed);
   }
 }
