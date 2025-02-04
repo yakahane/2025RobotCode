@@ -47,6 +47,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.FieldConstants.ReefDefinitePoses;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
@@ -100,6 +101,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
       TimeInterpolatableBuffer.createBuffer(1.5);
 
   private Field2d field = new Field2d();
+
+  private Optional<Alliance> alliance;
 
   private int bestTargetID;
   private double leftPoseX;
@@ -430,6 +433,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 new Transform2d(
                     bestTransform.getTranslation().plus(leftAprilTagOffset.getTranslation()),
                     new Rotation2d(0)));
+
     leftPoseX = leftAprilTagPose.getX();
     leftPoseY = leftAprilTagPose.getY();
 
@@ -466,6 +470,32 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         Set.of(this));
   }
 
+  public Command ReefAlignNoVision(Boolean leftAlign) {
+    return new DeferredCommand(
+        () -> {
+          Pose2d robotPose = getState().Pose;
+          Pose2d nearestPose = new Pose2d();
+          if (AllianceUtil.isRedAlliance()) {
+            if (leftAlign) {
+              nearestPose = robotPose.nearest(ReefDefinitePoses.redReefDefiniteLeftPoses);
+              return AutoBuilder.pathfindToPose(nearestPose, SwerveConstants.pathConstraints, 0.0);
+            } else {
+              nearestPose = robotPose.nearest(ReefDefinitePoses.redReefDefiniteRightPoses);
+              return AutoBuilder.pathfindToPose(nearestPose, SwerveConstants.pathConstraints, 0.0);
+            }
+          } else {
+            if (leftAlign) {
+              nearestPose = robotPose.nearest(ReefDefinitePoses.blueReefDefiniteLeftPoses);
+              return AutoBuilder.pathfindToPose(nearestPose, SwerveConstants.pathConstraints, 0.0);
+            } else {
+              nearestPose = robotPose.nearest(ReefDefinitePoses.blueReefDefiniteRightPoses);
+              return AutoBuilder.pathfindToPose(nearestPose, SwerveConstants.pathConstraints, 0.0);
+            }
+          }
+        },
+        Set.of(this));
+  }
+
   public PathPlannerPath getNearestPickupPath() {
     Pose2d closestStation;
     PathPlannerPath path = null;
@@ -478,7 +508,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     try {
       if (AllianceUtil.isRedAlliance()) {
         closestStation = getState().Pose.nearest(redStations);
-        // Use the index to determine which station is closest
         if (redStations.indexOf(closestStation) == 0) {
           path = PathPlannerPath.fromPathFile("Human Player Pickup Left");
         } else {
@@ -486,7 +515,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         }
       } else {
         closestStation = getState().Pose.nearest(blueStations);
-        // Use the index to determine which station is closest
         if (blueStations.indexOf(closestStation) == 0) {
           path = PathPlannerPath.fromPathFile("Human Player Pickup Left");
         } else {
@@ -512,6 +540,27 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             System.err.println("Invalid goalPath, path cannot be followed.");
             return new InstantCommand();
           }
+        },
+        Set.of(this));
+  }
+
+  public Command pathFindToSetup() {
+    return new DeferredCommand(
+        () -> {
+          Pose2d closestPose;
+
+          List<Pose2d> redSetupPoses = FieldConstants.redSetupPoses;
+          List<Pose2d> blueSetupPoses = FieldConstants.blueSetupPoses;
+
+          if (AllianceUtil.isRedAlliance()) {
+            closestPose = getState().Pose.nearest(redSetupPoses);
+
+          } else {
+            closestPose = getState().Pose.nearest(blueSetupPoses);
+          }
+
+          Pose2d goalSetUpPose = closestPose;
+          return AutoBuilder.pathfindToPose(goalSetUpPose, SwerveConstants.pathConstraints);
         },
         Set.of(this));
   }
@@ -741,6 +790,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     latestarducamLeftResult = arducamLeft.getAllUnreadResults();
     latestarducamRightResult = arducamRight.getAllUnreadResults();
     latestLimelightResult = limelight.getAllUnreadResults();
+
+    alliance = DriverStation.getAlliance();
 
     updateVisionPoseEstimates();
     final NetworkTableInstance inst = NetworkTableInstance.getDefault();

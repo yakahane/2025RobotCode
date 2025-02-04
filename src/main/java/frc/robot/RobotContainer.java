@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -24,7 +23,6 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.TurnToReef;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
@@ -136,21 +134,30 @@ public class RobotContainer {
     // driverController.R2().whileTrue(new TurnToReef(drivetrain));
     driverController.leftTrigger().whileTrue(drivetrain.humanPlayerAlign());
 
-    driverController
-        .rightBumper()
-        .whileTrue(
-            Commands.sequence(
-                new TurnToReef(drivetrain), Commands.waitSeconds(.08), drivetrain.ReefAlign(true)));
-    driverController
-        .rightTrigger()
-        .whileTrue(
-            Commands.sequence(
-                new TurnToReef(drivetrain),
-                Commands.waitSeconds(.08),
-                drivetrain.ReefAlign(false)));
+    // driverController
+    //     .rightBumper()
+    //     .whileTrue(
+    //         Commands.sequence(
+    //             drivetrain.pathFindToSetup(),
+    //             new TurnToReef(drivetrain),
+    //             Commands.waitSeconds(.08),
+    //             drivetrain.ReefAlign(true)));
+    // driverController
+    //     .rightTrigger()
+    //     .whileTrue(
+    //         Commands.sequence(
+    //             drivetrain.pathFindToSetup(),
+    //             new TurnToReef(drivetrain),
+    //             Commands.waitSeconds(.08),
+    //             drivetrain.ReefAlign(false)));
+
+    driverController.rightBumper().whileTrue(drivetrain.ReefAlignNoVision(true));
+
+    driverController.rightTrigger().whileTrue(drivetrain.ReefAlignNoVision(false));
 
     // reset the field-centric heading on left bumper press
-    driverController.back()
+    driverController
+        .back()
         .and(driverController.start())
         .onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric).ignoringDisable(true));
 

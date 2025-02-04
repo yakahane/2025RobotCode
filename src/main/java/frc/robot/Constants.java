@@ -44,6 +44,7 @@ import edu.wpi.first.units.measure.Time;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Constants {
@@ -160,11 +161,28 @@ public class Constants {
     public static final Pose2d blueStationRight =
         new Pose2d(0.85, 0.645, Rotation2d.fromDegrees(0));
 
-    // NEED TO CHANGE THESE VALUES
+    public static final List<Pose2d> redSetupPoses =
+        List.of(
+            new Pose2d(15.297, 4.019, Rotation2d.fromDegrees(180)), // 0
+            new Pose2d(14.176, 5.96, Rotation2d.fromDegrees(-120)), // 60
+            new Pose2d(11.934, 5.96, Rotation2d.fromDegrees(-60)), // 120
+            new Pose2d(10.813, 4.019, Rotation2d.fromDegrees(0)), // 180
+            new Pose2d(11.934, 2.0774, Rotation2d.fromDegrees(160)), // -120
+            new Pose2d(14.176, 2.0774, Rotation2d.fromDegrees(120))); // -60
+
+    public static final List<Pose2d> blueSetupPoses =
+        List.of(
+            new Pose2d(6.725, 4.019, Rotation2d.fromDegrees(180)), // 0
+            new Pose2d(5.604, 5.961, Rotation2d.fromDegrees(-120)), // 60
+            new Pose2d(3.362, 5.961, Rotation2d.fromDegrees(-60)), // 120
+            new Pose2d(2.241, 4.019, Rotation2d.fromDegrees(0)), // 180
+            new Pose2d(3.362, 2.078, Rotation2d.fromDegrees(60)), // -120
+            new Pose2d(5.604, 2.078, Rotation2d.fromDegrees(120))); // -60
+
     public static final Pose2d reefBlueAlliance =
-        new Pose2d(4.480, 4.046, Rotation2d.fromDegrees(0.0));
+        new Pose2d(4.483, 4.019, Rotation2d.fromDegrees(0.0));
     public static final Pose2d reefRedAlliance =
-        new Pose2d(13.077, 4.046, Rotation2d.fromDegrees(0));
+        new Pose2d(13.055, 4.019, Rotation2d.fromDegrees(0));
 
     public static final Map<Integer, Double> aprilTagAngles = new HashMap<>();
 
@@ -245,6 +263,44 @@ public class Constants {
       public static final Pose2d faceFiveRight = new Pose2d();
       public static final Pose2d faceSixLeft = new Pose2d();
       public static final Pose2d faceSixRight = new Pose2d();
+    }
+
+    public static class ReefDefinitePoses {
+      public static final List<Pose2d> blueReefDefiniteLeftPoses =
+          List.of(
+              new Pose2d(6.162, 4.187, Rotation2d.fromDegrees(180)),
+              new Pose2d(5.43, 2.682, Rotation2d.fromDegrees(120)),
+              new Pose2d(3.824, 2.449, Rotation2d.fromDegrees(60)),
+              new Pose2d(2.805, 3.839, Rotation2d.fromDegrees(0)),
+              new Pose2d(3.524, 5.446, Rotation2d.fromDegrees(300)),
+              new Pose2d(5.143, 5.601, Rotation2d.fromDegrees(240)));
+
+      public static final List<Pose2d> blueReefDefiniteRightPoses =
+          List.of(
+              new Pose2d(6.162, 4.187, Rotation2d.fromDegrees(180)),
+              new Pose2d(5.43, 2.682, Rotation2d.fromDegrees(120)),
+              new Pose2d(3.824, 2.449, Rotation2d.fromDegrees(60)),
+              new Pose2d(2.805, 3.839, Rotation2d.fromDegrees(0)),
+              new Pose2d(3.524, 5.446, Rotation2d.fromDegrees(300)),
+              new Pose2d(5.143, 5.601, Rotation2d.fromDegrees(240)));
+
+      public static final List<Pose2d> redReefDefiniteRightPoses =
+          List.of(
+              new Pose2d(14.752, 4.161, Rotation2d.fromDegrees(180)),
+              new Pose2d(14.032, 2.601, Rotation2d.fromDegrees(120)),
+              new Pose2d(12.398, 2.412, Rotation2d.fromDegrees(60)),
+              new Pose2d(11.351, 3.85, Rotation2d.fromDegrees(0)),
+              new Pose2d(12.105, 5.428, Rotation2d.fromDegrees(300)),
+              new Pose2d(13.759, 5.596, Rotation2d.fromDegrees(240)));
+
+      public static final List<Pose2d> redReefDefiniteLeftPoses =
+          List.of(
+              new Pose2d(14.752, 3.85, Rotation2d.fromDegrees(180)),
+              new Pose2d(13.738, 2.412, Rotation2d.fromDegrees(120)),
+              new Pose2d(12.105, 2.559, Rotation2d.fromDegrees(60)),
+              new Pose2d(11.351, 4.161, Rotation2d.fromDegrees(0)),
+              new Pose2d(12.356, 5.617, Rotation2d.fromDegrees(300)),
+              new Pose2d(14.032, 5.449, Rotation2d.fromDegrees(240)));
     }
   }
 
