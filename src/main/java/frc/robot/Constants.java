@@ -167,7 +167,7 @@ public class Constants {
             new Pose2d(14.176, 5.96, Rotation2d.fromDegrees(-120)), // 60
             new Pose2d(11.934, 5.96, Rotation2d.fromDegrees(-60)), // 120
             new Pose2d(10.813, 4.019, Rotation2d.fromDegrees(0)), // 180
-            new Pose2d(11.934, 2.0774, Rotation2d.fromDegrees(160)), // -120
+            new Pose2d(11.934, 2.0774, Rotation2d.fromDegrees(60)), // -120
             new Pose2d(14.176, 2.0774, Rotation2d.fromDegrees(120))); // -60
 
     public static final List<Pose2d> blueSetupPoses =
@@ -268,39 +268,39 @@ public class Constants {
     public static class ReefDefinitePoses {
       public static final List<Pose2d> blueReefDefiniteLeftPoses =
           List.of(
-              new Pose2d(6.162, 4.187, Rotation2d.fromDegrees(180)),
-              new Pose2d(5.43, 2.682, Rotation2d.fromDegrees(120)),
-              new Pose2d(3.824, 2.449, Rotation2d.fromDegrees(60)),
-              new Pose2d(2.805, 3.839, Rotation2d.fromDegrees(0)),
-              new Pose2d(3.524, 5.446, Rotation2d.fromDegrees(300)),
-              new Pose2d(5.143, 5.601, Rotation2d.fromDegrees(240)));
+              new Pose2d(5.812, 3.854, Rotation2d.fromDegrees(180)),
+              new Pose2d(5.021, 2.807, Rotation2d.fromDegrees(120)),
+              new Pose2d(3.689, 2.957, Rotation2d.fromDegrees(60)),
+              new Pose2d(3.155, 4.189, Rotation2d.fromDegrees(0)),
+              new Pose2d(3.953, 5.250, Rotation2d.fromDegrees(-60)),
+              new Pose2d(5.313, 5.093, Rotation2d.fromDegrees(-120)));
 
       public static final List<Pose2d> blueReefDefiniteRightPoses =
           List.of(
-              new Pose2d(6.162, 4.187, Rotation2d.fromDegrees(180)),
-              new Pose2d(5.43, 2.682, Rotation2d.fromDegrees(120)),
-              new Pose2d(3.824, 2.449, Rotation2d.fromDegrees(60)),
-              new Pose2d(2.805, 3.839, Rotation2d.fromDegrees(0)),
-              new Pose2d(3.524, 5.446, Rotation2d.fromDegrees(300)),
-              new Pose2d(5.143, 5.601, Rotation2d.fromDegrees(240)));
+              new Pose2d(5.812, 4.175, Rotation2d.fromDegrees(180)),
+              new Pose2d(5.278, 2.957, Rotation2d.fromDegrees(120)),
+              new Pose2d(3.967, 2.800, Rotation2d.fromDegrees(60)),
+              new Pose2d(3.170, 3.861, Rotation2d.fromDegrees(0)),
+              new Pose2d(3.689, 5.086, Rotation2d.fromDegrees(-60)),
+              new Pose2d(5.029, 5.236, Rotation2d.fromDegrees(-120)));
 
       public static final List<Pose2d> redReefDefiniteRightPoses =
           List.of(
-              new Pose2d(14.752, 4.161, Rotation2d.fromDegrees(180)),
-              new Pose2d(14.032, 2.601, Rotation2d.fromDegrees(120)),
-              new Pose2d(12.398, 2.412, Rotation2d.fromDegrees(60)),
-              new Pose2d(11.351, 3.85, Rotation2d.fromDegrees(0)),
-              new Pose2d(12.105, 5.428, Rotation2d.fromDegrees(300)),
-              new Pose2d(13.759, 5.596, Rotation2d.fromDegrees(240)));
+              new Pose2d(14.385, 4.182, Rotation2d.fromDegrees(180)),
+              new Pose2d(13.861, 2.964, Rotation2d.fromDegrees(120)),
+              new Pose2d(12.557, 2.807, Rotation2d.fromDegrees(60)),
+              new Pose2d(11.755, 3.847, Rotation2d.fromDegrees(0)),
+              new Pose2d(12.258, 5.072, Rotation2d.fromDegrees(-60)),
+              new Pose2d(13.568, 5.250, Rotation2d.fromDegrees(-120)));
 
       public static final List<Pose2d> redReefDefiniteLeftPoses =
           List.of(
-              new Pose2d(14.752, 3.85, Rotation2d.fromDegrees(180)),
-              new Pose2d(13.738, 2.412, Rotation2d.fromDegrees(120)),
-              new Pose2d(12.105, 2.559, Rotation2d.fromDegrees(60)),
-              new Pose2d(11.351, 4.161, Rotation2d.fromDegrees(0)),
-              new Pose2d(12.356, 5.617, Rotation2d.fromDegrees(300)),
-              new Pose2d(14.032, 5.449, Rotation2d.fromDegrees(240)));
+              new Pose2d(14.385, 3.861, Rotation2d.fromDegrees(180)),
+              new Pose2d(13.576, 2.821, Rotation2d.fromDegrees(120)),
+              new Pose2d(12.258, 2.964, Rotation2d.fromDegrees(60)),
+              new Pose2d(11.755, 4.175, Rotation2d.fromDegrees(0)),
+              new Pose2d(12.557, 5.243, Rotation2d.fromDegrees(-60)),
+              new Pose2d(13.861, 5.079, Rotation2d.fromDegrees(-120)));
     }
   }
 
@@ -311,11 +311,11 @@ public class Constants {
   public static class IntakeConstants {
     public static final int groundIntakeMotorID = 23;
     public static final int armIntakeMotorID = 21;
-    public static final int indexerMotorID = 22;
+    public static final int indexerMotorID = 45;
 
     public static final int intakeLaserCanID = 14;
 
-    public static final double indexerMotorSpeed = .5;
+    public static final double indexerMotorSpeed = .85;
     public static final double groundIntakeMotorSpeed = .9;
     public static final double outtakeSpeed = -0.9;
 
@@ -350,10 +350,10 @@ public class Constants {
     public static final int elevatorFollowerMotorID = 49;
     public static final int buttonSwitchID = 23;
 
-    public static final double maxHeight = Units.inchesToMeters(27.5);
+    public static final double maxHeight = Units.inchesToMeters(28.30);
     public static final double minHeight = 0.0;
 
-    public static final double L4Height = Units.inchesToMeters(27.25);
+    public static final double L4Height = Units.inchesToMeters(28.25);
     public static final double L3Height = Units.inchesToMeters(20);
     public static final double L2Height = Units.inchesToMeters(10);
     public static final double downHeight = Units.inchesToMeters(0);
@@ -377,7 +377,7 @@ public class Constants {
             .withKV(1.72) // 5.14
             .withKA(0.01) // .04
             .withKG(0.1) // .31
-            .withKP(20)
+            .withKP(30)
             .withKI(0.0)
             .withKD(.25) // 1
             .withGravityType(GravityTypeValue.Elevator_Static)

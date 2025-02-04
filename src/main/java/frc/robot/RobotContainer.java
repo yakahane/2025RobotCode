@@ -23,6 +23,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.TurnToReef;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Elevator;
@@ -134,26 +135,26 @@ public class RobotContainer {
     // driverController.R2().whileTrue(new TurnToReef(drivetrain));
     driverController.leftTrigger().whileTrue(drivetrain.humanPlayerAlign());
 
-    // driverController
-    //     .rightBumper()
-    //     .whileTrue(
-    //         Commands.sequence(
-    //             drivetrain.pathFindToSetup(),
-    //             new TurnToReef(drivetrain),
-    //             Commands.waitSeconds(.08),
-    //             drivetrain.ReefAlign(true)));
-    // driverController
-    //     .rightTrigger()
-    //     .whileTrue(
-    //         Commands.sequence(
-    //             drivetrain.pathFindToSetup(),
-    //             new TurnToReef(drivetrain),
-    //             Commands.waitSeconds(.08),
-    //             drivetrain.ReefAlign(false)));
+    driverController
+        .rightBumper()
+        .whileTrue(
+            Commands.sequence(
+                drivetrain.pathFindToSetup(),
+                new TurnToReef(drivetrain),
+                Commands.waitSeconds(.08),
+                drivetrain.ReefAlign(true)));
+    driverController
+        .rightTrigger()
+        .whileTrue(
+            Commands.sequence(
+                drivetrain.pathFindToSetup(),
+                new TurnToReef(drivetrain),
+                Commands.waitSeconds(.08),
+                drivetrain.ReefAlign(false)));
 
-    driverController.rightBumper().whileTrue(drivetrain.ReefAlignNoVision(true));
+    // driverController.rightBumper().whileTrue(drivetrain.ReefAlignNoVision(true));
 
-    driverController.rightTrigger().whileTrue(drivetrain.ReefAlignNoVision(false));
+    // driverController.rightTrigger().whileTrue(drivetrain.ReefAlignNoVision(false));
 
     // reset the field-centric heading on left bumper press
     driverController
@@ -233,19 +234,26 @@ public class RobotContainer {
   }
 
   private void configureIndexerBindings() {
+    // operatorStick
+    //     .button(OperatorConstants.indexerButton)
+    //     .and(armMode.negate())
+    //     .whileTrue(
+    //         indexer
+    //             .runIndexer()
+    //             .alongWith(outtake.runOuttake())
+    //             .unless(outtakeLaserBroken)
+    //             .until(outtakeLaserBroken))
+    //     .onFalse(indexer.stop().alongWith(outtake.stopOuttakeMotor()));
     operatorStick
         .button(OperatorConstants.indexerButton)
         .and(armMode.negate())
-        .whileTrue(
-            indexer
-                .runIndexer()
-                .alongWith(outtake.runOuttake())
-                .unless(outtakeLaserBroken)
-                .until(outtakeLaserBroken))
-        .onFalse(indexer.stop().alongWith(outtake.stopOuttakeMotor()));
+        .whileTrue(indexer.runIndexer())
+        .onFalse(indexer.stop());
 
-    // button to outtake indexer
-
+    operatorStick
+        .button(OperatorConstants.outtakeIndexerButton)
+        .whileTrue(indexer.outtakeIndexer())
+        .onFalse(indexer.stop());
   }
 
   private void configureAlgaeIntakeBindings() {

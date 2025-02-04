@@ -34,7 +34,7 @@ public class Indexer extends ExpandedSubsystem {
     SparkMaxConfig indexerConfig = new SparkMaxConfig();
 
     indexerConfig
-        .inverted(true)
+        .inverted(false)
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(IntakeConstants.indexerCurrentLimit)
         .secondaryCurrentLimit(IntakeConstants.indexerShutOffLimit);
@@ -47,8 +47,16 @@ public class Indexer extends ExpandedSubsystem {
     return run(this::index);
   }
 
+  public Command outtakeIndexer() {
+    return run(this::outtake);
+  }
+
   public Command stop() {
     return runOnce(this::stopIndexer);
+  }
+
+  public void outtake() {
+    indexerMotor.set(-IntakeConstants.indexerMotorSpeed);
   }
 
   public void index() {
