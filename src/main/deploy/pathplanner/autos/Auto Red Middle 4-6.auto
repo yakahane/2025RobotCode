@@ -1,0 +1,283 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle to 6L (Red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm to L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm home position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "6L to Station (Red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm to humanIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set Indexer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop indexer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm home position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Station to 5R (Red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm to L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm home position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5R to Station (Red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm to humanIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set Indexer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop indexer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm home position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Station to 5L (Red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm to L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm home position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5L to Station (Red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm to humanIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set Indexer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop indexer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm home position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Station to 4R (Red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm to L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm home position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4R to Station (Red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm to humanIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set Indexer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop indexer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm home position"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Station to 4L (Red)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm to L4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stop outtake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "set arm home position"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
