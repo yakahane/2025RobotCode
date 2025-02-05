@@ -8,9 +8,17 @@ import au.grapplerobotics.LaserCan;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.revrobotics.REVLibError;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.OuttakeConstants;
@@ -20,6 +28,10 @@ public class Outtake extends ExpandedSubsystem {
 
   private SparkMax outtakemotor;
   private LaserCan outtakeLaser;
+
+  private final double prematchDelay = 2.5;
+
+  public List<Alert> outtakePrematchAlert = new ArrayList<Alert>();
 
   public Outtake() {
     outtakemotor = new SparkMax(OuttakeConstants.outtakeMotorID, MotorType.kBrushless);
@@ -66,6 +78,37 @@ public class Outtake extends ExpandedSubsystem {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Outtake Speed", outtakemotor.get());
     // This method will be called once per scheduler run
+  }
+
+  public Command getPrematchCheckCommand() {
+    return Commands.sequence(
+      Commands.runOnce(
+        () -> {
+          REVLibError error = outtakemotor.getLastError();
+          if (error != REVLibError.kOk) {
+            addError("outtake motor error:" + error.name());
+          } else {
+            addInfo("outtake motor contains no errors");
+
+          }
+
+        }),
+    Commands.waitSeconds(prematchDelay),
+    Commands.runOnce(
+        () -> {
+          if (Math.abs(outtakemotor.get()) <= 1e-4) {
+          if (outtakemotor.get() < OuttakeConstants.outtakeSpeed - 0.1
+          || outtakemotor.get () > OuttakeConstants.outtakeSpeed + 0.1) {
+            addError("OUttake motor is not at desired velocity");
+
+          }
+          addError("Outtake motor is not moving");
+        } else {
+          addInfo("outtake motor is moving");
+        }
+      }));
+    
   }
 }
